@@ -1,0 +1,65 @@
+select id, username, 
+MIN(created_at) AS user_joining_date
+FROM users
+GROUP BY id
+ORDER BY created_at ASC
+LIMIT 5;
+
+
+SELECT count(*) from photos
+where image_url is null;
+
+
+
+select 
+  users_id as user_id,
+  username,
+  photos.id AS photo_id,
+  photos.image_url,
+  count(*) as total_likes_count
+from 
+  join likes
+    on photos.id = likes.photo_id
+  join users
+    on users.id = photos.user_id
+  group by photos.id
+  order by total_likes_count DESC
+  limit 1;
+
+
+
+select id, tag_name
+from tags
+group by id
+order by tag_name desc
+limit 5;
+
+
+
+select 
+  dayofweek(created_at) as day_of_week,
+  count(*) as registration_count
+from
+  users
+group by 
+  day_of_week
+order by
+  registration_count desc
+limit 1;
+
+
+select 
+round( ( select count(*) from photos ) / ( select count(*) from users) , 2 ) as avg_user_post;
+
+
+select users.id, username, count(users.id) as total_likes_by_user
+from users
+join likes on users.id = likes.user_id
+group by users_id
+having total_likes_by_user = (select count(*) from photos);
+
+
+
+
+
+
